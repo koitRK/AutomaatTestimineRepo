@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Teacher extends PersonImpl {
 
-    public Teacher(String firstName, String lastname, LocalDate dateOfBirth) {
-        super(firstName, lastname, dateOfBirth);
+    public Teacher(String firstName, String lastName, LocalDate dateOfBirth) {
+        super(firstName, lastName, dateOfBirth);
     }
 
     @Override

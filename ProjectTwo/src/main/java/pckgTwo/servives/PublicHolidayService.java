@@ -55,6 +55,9 @@ public class PublicHolidayService {
     }
 
     public Integer countWeekdays(LocalDate startDate, LocalDate endDate){
+        if (endDate.isBefore(startDate)){
+            throw new IllegalArgumentException("End date can not be fore start date");
+        }
         endDate = endDate.plusDays(1);
         final DayOfWeek startW = startDate.getDayOfWeek();
         final DayOfWeek endW = endDate.getDayOfWeek();
@@ -64,7 +67,7 @@ public class PublicHolidayService {
         return Math.toIntExact(daysWithoutWeekends + (startW == DayOfWeek.SUNDAY ? 1 : 0) + (endW == DayOfWeek.SUNDAY ? 1 : 0));
     }
 
-    public Integer countWorkdays(LocalDate startDate, LocalDate endDate){
+    public Integer countWorkdays(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException {
         return countWeekdays(startDate, endDate) - countHolidaysOnWeekdays(startDate, endDate);
     }
 }

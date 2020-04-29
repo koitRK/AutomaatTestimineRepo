@@ -6,17 +6,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-class PersonImplTest {
+public class TeacherTest {
 
     @Test
-    void personImpl_sayHello_should_greet_person() {
-        PersonImpl personImpl = new PersonImpl("Jaan", "Tamm", null);
+    public void teacher_sayHello_should_greet_teacher() {
+        Teacher teacher = new Teacher("Alfred", "Aas", null);
 
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        personImpl.sayHello();
-        assertEquals("Hello, person Jaan Tamm\r\n", String.valueOf(outContent));
+        teacher.sayHello();
+        assertEquals("Hello, teacher Alfred Aas\r\n", String.valueOf(outContent));
     }
 }
