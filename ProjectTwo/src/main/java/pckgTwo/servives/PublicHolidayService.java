@@ -1,7 +1,9 @@
 package pckgTwo.servives;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.DayOfWeek;
@@ -17,30 +19,46 @@ import com.google.gson.reflect.TypeToken;
 public class PublicHolidayService {
 
     private static final String COUNTRY_CODE = "EE";
-    private static final String API_URL = "https://date.nager.at/api/v2/PublicHolidays/";
+    private static final String API_URL = "https://date.nager.at/api/v2/PublicHolidays";
+    private final String baseUrl;
 
 
-    public ArrayList<Map<String, String>> getPublicHolidaysByYear(Integer year) {
-
-        Gson gson = new Gson();
-        String composedUrl = API_URL +  year + "/" + COUNTRY_CODE;
-
-        try {
-            URL url = new URL(composedUrl);
-            URLConnection yc = url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-            String inputLine = in.readLine();
-            in.close();
-
-            return gson.fromJson(inputLine, new TypeToken<List<Map<String, String>>>(){}.getType());
-        }
-        catch (Exception ex) {
-            System.out.println("Couldn't get public holidays");
-            return null;
-        }
+    public PublicHolidayService() {
+        this.baseUrl = API_URL;
     }
 
-    public Integer countHolidaysOnWeekdays(LocalDate startDate, LocalDate endDate){
+    public PublicHolidayService(String url) {
+        this.baseUrl = url;
+    }
+
+    public ArrayList<Map<String, String>> getPublicHolidaysByYear(Integer year) throws IOException {
+
+        Gson gson = new Gson();
+        String composedUrl = baseUrl + "/" +  year + "/" + COUNTRY_CODE;
+        System.out.println("THIS IS THE URL: " + composedUrl);
+
+        //try {
+            URL url = new URL(composedUrl);
+            URLConnection yc = url.openConnection();
+            System.out.println("error on next line____");
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+
+            String inputLine = in.readLine();
+            in.close();
+            ArrayList<Map<String, String>> result = gson.fromJson(inputLine, new TypeToken<List<Map<String, String>>>(){}.getType());
+            if (result.size() == 0){
+                throw new IllegalStateException();
+            }
+            return result;
+        }
+//        catch (Exception ex) {
+//            System.out.println("Couldn't get public holidays" + ex);
+//
+//            return null;
+//        }
+//    }
+
+    public Integer countHolidaysOnWeekdays(LocalDate startDate, LocalDate endDate) throws IOException {
         ArrayList<Map<String, String>> holidays = getPublicHolidaysByYear(startDate.getYear());
         int holidaysOnWeekdays = 0;
 
@@ -67,7 +85,7 @@ public class PublicHolidayService {
         return Math.toIntExact(daysWithoutWeekends + (startW == DayOfWeek.SUNDAY ? 1 : 0) + (endW == DayOfWeek.SUNDAY ? 1 : 0));
     }
 
-    public Integer countWorkdays(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException {
+    public Integer countWorkdays(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException, IOException {
         return countWeekdays(startDate, endDate) - countHolidaysOnWeekdays(startDate, endDate);
     }
 }

@@ -13,4 +13,12 @@ public class Teacher extends PersonImpl {
         System.out.println(String.format("Hello, teacher %s", getFullName()));
     }
 
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                '}';
+    }
 }

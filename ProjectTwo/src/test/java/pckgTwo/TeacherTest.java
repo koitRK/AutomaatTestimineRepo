@@ -1,6 +1,7 @@
 package pckgTwo;
 
 import org.junit.jupiter.api.Test;
+import pckgTwo.Teacher;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

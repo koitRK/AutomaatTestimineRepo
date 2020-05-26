@@ -1,6 +1,8 @@
 package pckgTwo;
 
 import pckgTwo.servives.PublicHolidayService;
+
+import java.io.IOException;
 import java.time.LocalDate;
 
 
@@ -32,7 +34,6 @@ public class Course {
     }
 
     public Integer getEAP() {
-        System.out.println("If you see this during Testing, youre f*cked");
         return EAP;
     }
 
@@ -72,7 +73,19 @@ public class Course {
         return endDate;
     }
 
-    public Integer getLength() {
+    public Integer getLength() throws IOException {
         return publicHolidayService.countWorkdays(startDate, endDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "courseName='" + courseName + '\'' +
+                ", name='" + name + '\'' +
+                ", EAP=" + EAP +
+                ", teacher=" + teacher +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }
